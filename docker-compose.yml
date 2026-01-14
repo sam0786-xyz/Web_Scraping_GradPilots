@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: uae-university-scraper
+    volumes:
+      - ./output:/app/output
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+    command: python main.py --fast
+    networks:
+      - scraper-network
+
+  # Optional: PostgreSQL database
+  postgres:
+    image: postgres:15-alpine
+    container_name: uae-university-db
+    environment:
+      POSTGRES_DB: uae_education
+      POSTGRES_USER: gradpilots
+      POSTGRES_PASSWORD: gradpilots_secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - scraper-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U gradpilots -d uae_education" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Optional: pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: uae-university-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gradpilots.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - scraper-network
+
+volumes:
+  postgres_data:
+
+
+networks:
+  scraper-network:
+    driver: bridge

@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Output files (regenerated on each run)
+output/*.csv
+output/*.xlsx
+output/*.log
+
+# Keep JSON outputs
+!output/*.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Selenium/Chrome
+*.log
+chromedriver*
+
+# Temporary files
+*.tmp
+*.temp

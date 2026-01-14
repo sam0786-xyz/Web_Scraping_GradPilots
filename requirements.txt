@@ -1,0 +1,14 @@
+# Core dependencies
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Pydantic for data validation
+pydantic>=2.5.0
+
+# Selenium for dynamic content (optional)
+selenium>=4.15.0
+webdriver-manager>=4.0.0
+
+# Progress bar
+tqdm>=4.66.0
